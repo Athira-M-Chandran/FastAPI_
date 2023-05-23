@@ -36,7 +36,9 @@
 3. Complete the Installation
 4. Verify the Installation
     In the Command Prompt, type the following command:
+
     ```python --version```
+
     ```pip --version ```
 5. Update pip (optional):
 
@@ -46,19 +48,24 @@
 
 - Step 1: Create a virtual environment (optional but recommended)
     Creating a virtual environment is a good practice to isolate your project dependencies. It allows you to have separate Python environments for different projects. You can create a virtual environment by running the following command in the Command Prompt or Terminal:
+
     ```python -m venv myenv```
 
 - Step 2: Activate the virtual environment
     Activate the virtual environment by running the appropriate command based on your operating system:
+
     ```myenv\Scripts\activate```
 
     Once activated, your command prompt or terminal will indicate the active virtual environment.
 
 - Step 3: Install FastAPI and dependencies
+
     ```pip install fastapi uvicorn```
+
     This command will install FastAPI and uvicorn, a recommended ASGI server for running FastAPI applications.
 
 - Step 4: Additional dependencies (optional):
+
     ```pip install sqlalchemy```
 
 
