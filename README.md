@@ -32,6 +32,7 @@
 
 1. [Download Python Installer](https://www.python.org)
 2. Run the Installer - 
+
     Make sure to check the box that says "Add Python to PATH" during the installation process. This will enable you to use Python from the Command Prompt.
 3. Complete the Installation
 4. Verify the Installation
@@ -67,6 +68,46 @@
 - Step 4: Additional dependencies (optional):
 
     ```pip install sqlalchemy```
+## Section 3: FastAPI - Starting Fast API
+
+* Step 1: Create a new Python file:
+
+    Open your preferred text editor and create a new Python file. You can name it whatever you like, for example, main.py.
+* Step 2: Import FastAPI:
+
+    In your Python file, import the FastAPI module by adding the following line at the top:
+
+    ```from fastapi import FastAPI```
+
+* Step 3: Create an instance of the FastAPI application:
+
+    Create an instance of the FastAPI application by initializing a FastAPI object. Add the following code after the import statement:
+
+    ```app = FastAPI()```
+
+* Step 4: Define a route and handler function:
+
+    Create a route by defining a function that will handle the incoming requests. This function will be called when a request is made to a specific URL path. For example, let's create a simple "Hello, World!" route. Add the following code after the app = FastAPI() line:
+
+    ```
+    @app.get("/")
+    def read_root():
+        return {"Hello": "World"}
+    ```
+
+    In this example, the @app.get("/") decorator specifies that this function will handle HTTP GET requests to the root path ("/") of your application. The function itself returns a dictionary that will be converted into a JSON response.
+
+* Step 5: Run the FastAPI application:
+
+    To run the FastAPI application, you need to start the server. Open your terminal or command prompt, navigate to the directory where your Python file is located, and run the following command:
+
+    ```uvicorn main:app --reload```
+
+    The uvicorn command starts the server using the provided Python file (main) and the FastAPI application instance (app). The --reload option enables automatic reloading of the server whenever code changes are detected, which is helpful during development.
+
+* Step 6: Access the FastAPI application:
+
+    Once the server is running, you can access your FastAPI application by opening a web browser and navigating to http://localhost:8000 or http://127.0.0.1:8000. You should see the "Hello, World!" response.
 
 
 
