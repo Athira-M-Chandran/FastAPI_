@@ -109,5 +109,72 @@
 
     Once the server is running, you can access your FastAPI application by opening a web browser and navigating to http://localhost:8000 or http://127.0.0.1:8000. You should see the "Hello, World!" response.
 
+## Section 3: FastAPI - Path operations
+
+ Path operations are used to define routes that handle specific URL paths and HTTP methods. These routes define the behavior of your API endpoints.
+
+ - Define a path operation:
+
+    To define a path operation, you can use the decorator syntax. For example, let's create a GET endpoint at the path "/items/{item_id}" that returns the item ID:
+
+    ```
+    @app.get("/items/{item_id}")
+    def read_item(item_id: int):
+        return {"item_id": item_id}
+    ```
+     The value of item_id will be extracted from the URL path and passed as an argument to the function.
+
+- Path parameters and query parameters:
+
+    FastAPI supports both path parameters and query parameters. Path parameters are defined within the URL path itself, whereas query parameters are appended to the URL after a question mark (?).
+
+    ```
+
+    @app.get('/get_items/{item_id}')
+    def read_item(item_id: int, q: str = None):
+        if(q):
+            result = {'item_id':item_id, 'q':q}
+            return(result)
+        return{'item_id':item_id}
+    ```
+- Request body:
+    You can also define path operations that accept request bodies using models. 
+    ```
+    from pydantic import BaseModel
+
+    class Item(BaseModel):
+        name: str
+        price: float
+    ```
+    save it as model.py
+
+- Handle different HTTP methods:
+
+    You can define path operations for different HTTP methods like GET, POST, PUT, DELETE, etc. For example:
+    ```
+    @app.post("/items")
+    def create_item(item: Item):
+        # Handle creating a new item
+        return {"item": item}
+    ```
+
+    now send a POST request to the /items/ endpoint using a tool like cURL or an API testing tool like Postman. For example:
+
+    ```
+    {
+        "name": "Example Item",
+        "price": 9.99
+    }
+    ```
+    For multiple values use list by importing typing package
+
+    ```
+    from typing import List
+    @app.post('/multiple_items/')
+    def create_items(items: List[Item]):
+        return {"items" : items}
+    ```
+    
+
 
 
