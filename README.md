@@ -174,7 +174,44 @@
     def create_items(items: List[Item]):
         return {"items" : items}
     ```
-    
+
+### Path Operation Order
+
+1. Path operations with literal paths:
+
+    These paths are defined explicitly and do not contain any path parameters. For example:
+    ```
+    @app.get("/items")
+    def get_items():
+        # Handle GET request for /items
+        pass
+    ```
+2. Path operations with path parameters:
+
+    These paths contain placeholders enclosed in curly braces ({}) to capture dynamic values from the URL. For example:
+    ```
+    @app.get("/items/{item_id}")
+    def get_item(item_id: int):
+        # Handle GET request for /items/{item_id}
+        pass
+    ```
+3. Path operations with catch-all route:
+
+    The catch-all route uses a path parameter with a default value of `Path(...)`, indicating that it can match any path. For example:
+    ```
+    from fastapi import Path
+
+    @app.get("/items/{item_path:path}")
+    def get_item_by_path(item_path: str = Path(...)):
+        # Handle GET request for /items/{item_path}
+        pass
+    ```
+    In this example, we have defined a path operation with a catch-all route using the `{item_path:path}` syntax. This route will match any path that starts with `"/items/"` and capture the remaining path as the item_path parameter.
+
+
+
+
+
 
 
 
