@@ -109,7 +109,7 @@
 
     Once the server is running, you can access your FastAPI application by opening a web browser and navigating to http://localhost:8000 or http://127.0.0.1:8000. You should see the "Hello, World!" response.
 
-## Section 3: FastAPI - Path operations
+### FastAPI - Path operations
 
  Path operations are used to define routes that handle specific URL paths and HTTP methods. These routes define the behavior of your API endpoints.
 
@@ -208,6 +208,26 @@
     ```
     In this example, we have defined a path operation with a catch-all route using the `{item_path:path}` syntax. This route will match any path that starts with `"/items/"` and capture the remaining path as the item_path parameter.
 
+### FastAPI - Intro to Postman
+
+> Postman is a popular API development and testing tool that allows you to send HTTP requests and view the responses. It provides a user-friendly interface for interacting with APIs and simplifies the process of testing and debugging API endpoints.
+
+1. [Install Postman](https://www.postman.com/)
+2. Open Postman
+3. Create a new request:
+    To send a request to your FastAPI application, click on the "New" button in the top-left corner of the Postman interface. Choose the HTTP method (GET, POST, PUT, DELETE, etc.) you want to use for the request.
+4. Enter the request URL:
+    In the URL field, enter the endpoint URL of your FastAPI application. For example, if your FastAPI application is running on `http://localhost:8000` and you have defined a route like `@app.get("/items/{item_id}")`, you can enter `http://localhost:8000/items/123` in the URL field.
+5. Set request headers (if required):
+    If your FastAPI endpoint requires specific headers, you can set them in the Headers section of the Postman request. Click on the "Headers" tab and add the required headers as key-value pairs.
+6. Set request body (if required):
+    If your FastAPI endpoint expects a request body (e.g., for POST or PUT requests), you can set the body content in the "Body" section of the Postman request. Choose the appropriate format (e.g., JSON, form-data, etc.) and enter the required data.
+7. Send the request:
+    Once you have configured the request URL, headers, and body, click on the "Send" button to send the request to your FastAPI application.
+8. View the response:
+    Postman will display the response received from your FastAPI application. You can see the response status code, headers, and the response body. Use this information to verify that your FastAPI endpoints are functioning correctly.
+
+> By using Postman, you can easily send different types of requests (GET, POST, PUT, DELETE) to your FastAPI application, test various scenarios, and examine the responses to ensure your API endpoints are working as expected. It is a powerful tool for API development and debugging.
 
 
 
