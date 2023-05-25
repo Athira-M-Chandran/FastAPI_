@@ -229,6 +229,25 @@
 
 > By using Postman, you can easily send different types of requests (GET, POST, PUT, DELETE) to your FastAPI application, test various scenarios, and examine the responses to ensure your API endpoints are working as expected. It is a powerful tool for API development and debugging.
 
+### HTTP POST Requests
+
+>HTTP POST requests are used to send data to a server and create a new resource on the server. In FastAPI, you can handle POST requests by defining a path operation decorated with @app.post() or @app.route() decorators. Here's an example:
+
+```
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.post("/items")
+async def create_item(item: Item):
+    # Logic to create the item
+    return {"message": "Item created successfully"}
+```
+In this example, we define a path operation using the ` @app.post()` decorator with the path `"/items"`. The `create_item()` function handles the POST request to `"/items"`. The function takes a parameter named item of type Item. The request body will be automatically parsed and validated based on the Item model or schema.
+
+
+
+
 
 
 
