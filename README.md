@@ -294,6 +294,61 @@ In this example, we define a path operation using the ` @app.post()` decorator w
     ```
 [Refer](schema_validation.py)
 
+## CRUD Operations
+
+> Create, Read, Update, and Delete
+1. Create (POST): To create a new resource, you can define a route with the HTTP method `POST`.
+```
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+app = FastAPI()
+
+class ItemCreate(BaseModel):
+    name: str
+    description: str
+
+@app.post("/items")
+async def create_item(item: ItemCreate):
+    # Create a new item using the data from the request body
+    # Perform any necessary operations, e.g., save to the database
+    created_item = {"id": 1, "name": item.name, "description": item.description}
+    return created_item
+```
+
+2. Read (GET): To retrieve existing resources, you can define routes with the HTTP method `GET`.
+
+```
+@app.get("/items/{item_id}")
+async def get_item(item_id: int):
+    # Retrieve the item with the given item_id from the database
+    item = {"id": item_id, "name": "Item 1", "description": "Description of Item 1"}
+    return item
+```
+
+3. Update (PUT or PATCH): To update an existing resource, you can define routes with the HTTP methods `PUT` or `PATCH`
+```
+class ItemUpdate(BaseModel):
+    name: str
+    description: str
+
+@app.put("/items/{item_id}")
+async def update_item(item_id: int, item_update: ItemUpdate):
+    # Update the item with the given item_id using the data from the request body
+    # Perform any necessary operations, e.g., update in the database
+    updated_item = {"id": item_id, "name": item_update.name, "description": item_update.description}
+    return updated_item
+```
+
+4. Delete (DELETE): To delete an existing resource, you can define a route with the HTTP method `DELETE`. 
+```
+@app.delete("/items/{item_id}")
+async def delete_item(item_id: int):
+    # Delete the item with the given item_id from the database
+    return {"message": f"Item {item_id} deleted successfully"}
+```
+[Refer](crud_operations.py)
+
 
 
 
