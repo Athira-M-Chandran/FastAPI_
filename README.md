@@ -383,6 +383,12 @@ By saving your requests as collections, you can easily organize and manage them,
 
 [Refer](retrieve.py)
 
+### Changing response Status Codes
+
+> In FastAPI, you can change the response status codes by using the appropriate status code constants provided by the fastapi.status module or by directly specifying the status code as an integer.
+
+[Example](statusCodes.py)
+
 
 
 
