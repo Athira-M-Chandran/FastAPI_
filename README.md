@@ -349,6 +349,12 @@ async def delete_item(item_id: int):
 ```
 [Refer](crud_operations.py)
 
+### Storing posts in Array
+
+> To store posts in an array using FastAPI, you can define a route to handle the creation of posts and maintain a list to store the posts.
+
+[Example](postsInArray)
+
 
 
 
