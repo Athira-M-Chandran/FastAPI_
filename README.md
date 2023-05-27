@@ -353,7 +353,15 @@ async def delete_item(item_id: int):
 
 > To store posts in an array using FastAPI, you can define a route to handle the creation of posts and maintain a list to store the posts.
 
-[Example](postsInArray)
+[Example](postsInArray.py)
+
+### Creating posts
+
+To create posts in FastAPI, you can use the HTTP POST method and define a route that handles the creation of posts.
+
+[Example](create_post.py)
+
+
 
 
 
