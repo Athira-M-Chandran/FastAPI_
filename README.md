@@ -245,6 +245,54 @@ async def create_item(item: Item):
 ```
 In this example, we define a path operation using the ` @app.post()` decorator with the path `"/items"`. The `create_item()` function handles the POST request to `"/items"`. The function takes a parameter named item of type Item. The request body will be automatically parsed and validated based on the Item model or schema.
 
+### Schema Validation with Pydantic
+
+> Schema validation is the process of validating the structure, data types, and constraints of incoming data against a defined schema or model.
+
+> In FastAPI, you can perform schema validation using Pydantic, a powerful data validation and serialization library. Pydantic allows you to define data models or schemas with annotated fields, which will be used to validate and parse incoming request data.
+
+1. Define a Pydantic model: 
+    Create a Pydantic model that represents the expected structure and data types of the incoming data. You can define fields with their respective data types and any additional validation rules or constraints.
+    ```
+    from pydantic import BaseModel
+
+    class Item(BaseModel):
+        name: str
+        price: float
+    ```
+2. Use the model in the path operation:
+     In your FastAPI path operation, specify the model as the parameter type. FastAPI will automatically validate and parse the incoming request data against the defined model.
+
+     ```
+     from fastapi import FastAPI
+
+    app = FastAPI()
+
+    @app.post("/items")
+    def create_item(item: Item):
+        # Logic to create the item
+        return {"message": "Item created successfully"}
+    ```
+3. Handle validation errors: 
+    If the incoming data does not match the defined schema, FastAPI will automatically return a validation error response with details about the validation errors. You can handle these errors and customize the response as needed.
+
+    ```
+    from fastapi import HTTPException
+
+    try:
+        # Code that can raise specific exceptions
+        pass
+    except ValueError as e:
+        # Handle ValueError
+        pass
+    except ValidationError as e:
+        # Handle ValidationError
+        pass
+    except HTTPException as e:
+        # Handle HTTPException
+        pass
+    ```
+[Refer](schema_validation.py)
 
 
 
