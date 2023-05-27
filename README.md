@@ -361,6 +361,23 @@ To create posts in FastAPI, you can use the HTTP POST method and define a route 
 
 [Example](create_post.py)
 
+### Postman Collections & saving requests
+
+> Postman Collections are a way to organize and store API requests for easy access and sharing. You can save your requests as collections in Postman to keep them organized and readily available for future use. 
+
+1. Open Postman and make sure you have the request you want to save.
+
+2. Click on the "Save" button located at the top right corner of the Postman interface.
+
+3. In the pop-up window, select the desired collection or create a new one. Collections allow you to group related requests together.
+
+4. Enter a name for the request and click on the "Save" button. This will save the request in the selected collection.
+
+5. You can access your saved requests by clicking on the "Collections" tab in the left sidebar. Select the desired collection to see all the saved requests within it.
+
+6. To make changes to a saved request, simply open the request from the collection, make the necessary modifications, and save it again.
+
+By saving your requests as collections, you can easily organize and manage them, as well as share them with your team or others. Postman also provides features like variables, environments, and test scripts to further enhance your API testing and development workflow.
 
 
 
