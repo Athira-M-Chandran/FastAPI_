@@ -379,6 +379,9 @@ To create posts in FastAPI, you can use the HTTP POST method and define a route 
 
 By saving your requests as collections, you can easily organize and manage them, as well as share them with your team or others. Postman also provides features like variables, environments, and test scripts to further enhance your API testing and development workflow.
 
+### Retrieve One Post
+
+[Refer](retrieve.py)
 
 
 
