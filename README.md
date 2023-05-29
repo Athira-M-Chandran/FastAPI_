@@ -393,7 +393,10 @@ By saving your requests as collections, you can easily organize and manage them,
 
 [Refer](deletingPost.py)
 
+### Updating posts
+> To update posts in your FastAPI application, you can create a PUT or PATCH route that receives the updated post data and the post ID, and then updates the corresponding post in the list.
 
+[Refer](updatingPost.py)
 
 
 
