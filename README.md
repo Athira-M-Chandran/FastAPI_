@@ -389,6 +389,10 @@ By saving your requests as collections, you can easily organize and manage them,
 
 [Example](statusCodes.py)
 
+### Deleting posts
+
+[Refer](deletingPost.py)
+
 
 
 
