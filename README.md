@@ -398,8 +398,27 @@ By saving your requests as collections, you can easily organize and manage them,
 
 [Refer](updatingPost.py)
 
+### Automatic Documentation
+> You can access the documentation by visiting the `/docs` endpoint to view the Swagger UI or the `/redoc` endpoint to view the ReDoc UI.
 
+For more Details- [click here](documentation.py)
+ 
+ Make sure to customize the documentation routes as needed and adjust any other settings according to your application's requirements.
 
+### FastAPI - Python packages
+
+> FastAPI is a modern and high-performance web framework for building APIs with Python. While FastAPI itself is a powerful package, there are several additional Python packages that can complement and enhance your FastAPI development experience. 
+1. **uvicorn** : A lightning-fast ASGI server that is recommended for running FastAPI applications in production. It provides excellent performance and supports asynchronous request handling.
+2. **pydantic** : A data validation and parsing library that is heavily used in FastAPI for request and response validation. Pydantic allows you to define data models with type annotations and provides automatic data validation and serialization/deserialization capabilities.
+3. **SQLAlchemy** : A popular SQL toolkit and Object-Relational Mapping (ORM) library for Python. SQLAlchemy makes it easy to work with databases in FastAPI applications by providing a high-level, Pythonic interface for interacting with databases.
+4. **Alembic**: A database migration tool that works seamlessly with SQLAlchemy. Alembic allows you to manage and apply database schema changes over time, making it easier to evolve your database schema as your FastAPI application grows.
+5. **OAuth2** : FastAPI has built-in support for OAuth2 authentication. The `oauthlib` and `python-jose` packages are commonly used to implement OAuth2 authentication flows with FastAPI.
+6. **Redis**: A popular in-memory data store that can be used as a caching layer in FastAPI applications. The `aioredis` package provides an asynchronous Redis client that works well with FastAPI's async capabilities.
+7. **JWT**: JSON Web Tokens (JWT) are a common authentication mechanism in web applications. The PyJWT package is widely used to handle JWT authentication in FastAPI applications.
+8. **CORS** : Cross-Origin Resource Sharing (CORS) is an important aspect of web APIs. The `fastapi-cors` package provides middleware to handle CORS-related headers and configurations in FastAPI applications.
+9. **FastAPI-utils** : A collection of utilities and tools that enhance FastAPI development. It includes features like dependency injection, reusable decorators, validation helpers, and more.
+
+You can install these packages using pip, just like any other Python package, and incorporate them into your FastAPI projects as needed.
 
 
 
