@@ -485,6 +485,121 @@ When designing a database schema and creating tables, consider the following asp
 - Implement appropriate access control mechanisms to restrict user privileges and protect sensitive data.
 - Set up proper authentication and authorization measures to ensure data security.
 
+### Managing Postgres with PgAdmin GUI
 
+> Managing PostgreSQL with the pgAdmin GUI provides a user-friendly interface for performing various administrative tasks on your PostgreSQL database.
+
+1. **Launch pgAdmin** : 
+
+    Firstly, we will open the pgAdmin application. For this, we will enter `pgAdmin` into the search bar of our system
+2. **Create a server** :
+
+    After that, we will right-click on the Servers node and select the `Register` → `Server… menu` to create a server
+3. **Provide the server name** :
+
+    After selecting the `Server` option, the `Create-Server` window will be opened, where we enter the server name in the Name column, for example, `PostgreSQL1` and then we will click on the `Connection` tab,
+4. **Provide the host and password** :
+
+    After clicking on the `Connection` tab, we will provide the details of the `host` (eg. localhost) and `password` for the Postgres user, and after that, we will click on the `Save` button.
+5. **Expanding the server** :
+
+    In the next step, we will click on the `Servers` node to expand the server. And PostgreSQL has a database named `Postgres` by default
+6. **Open the Query tool** :
+
+    Now, we will open the query tool by selecting the menu item `Tool` → `Query Tool`, or we can directly click the `query tool` icon nearby Browser
+7. **Enter the command in the Query editor** :
+
+    Enter the below command in the Query Editor and click on the `Execute` button.
+
+    ```
+    Select Version();
+    ```
+### Databases - Your first SQL Query
+
+1. **Launch the SQL Client**: Open your preferred SQL client or interface. This can be a command-line tool, a GUI-based application, or a web-based interface depending on your setup and preferences.
+
+2. **Connect to the Database**: In your SQL client, establish a connection to the database where you want to execute the query. Provide the necessary details such as the server address, port number, database name, username, and password. Once connected, you should see a prompt or interface ready to accept SQL commands.
+
+3. **Write the SQL Query**: Now it's time to write your SQL query. SQL queries are written using the SQL (Structured Query Language) syntax. Here's an example of how you can create a "customers" table:
+
+```
+CREATE TABLE customers (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100),
+  email VARCHAR(100),
+  phone VARCHAR(20)
+);
+
+```
+To add entries to the "customers" table, you can use the INSERT INTO statement in SQL. Here's an example of how you can insert some sample data into the table:
+
+```
+INSERT INTO customers (name, email, phone)
+VALUES ('John Doe', 'johndoe@example.com', '123-456-7890');
+
+INSERT INTO customers (name, email, phone)
+VALUES ('Jane Smith', 'janesmith@example.com', '987-654-3210');
+
+INSERT INTO customers (name, email, phone)
+VALUES ('Alice Johnson', 'alicejohnson@example.com', '555-123-4567');
+```
+
+ run the `SELECT * FROM customers;` query again to retrieve all the entries and verify that they have been successfully added to the table.
+
+ ### Databases - Filter results with "where" keyword
+
+ ```
+select * 
+from customers
+where id=2;
+```
+ Here is an overview of some commonly used WHERE clauses and operators in PostgreSQL:
+
+ 
+1. *Comparison Operators:*
+
+- `=`: Equal to
+- `<>` or `!=`: Not equal to
+- `<`: Less than
+- `>`: Greater than
+- `<=`: Less than or equal to
+- `>=`: Greater than or equal to
+- `IS NULL`: Value is null
+- `IS NOT NULL`: Value is not null
+
+2. *Logical Operators:*
+
+- AND: Both conditions must be true
+- OR: Either condition must be true
+- NOT: Negates a condition
+
+3. *Pattern Matching Operators:*
+
+- LIKE: Matches a pattern
+- ILIKE: Matches a pattern case-insensitively
+- SIMILAR TO: Matches a regular expression pattern
+
+4. *Range Operators:*
+
+- BETWEEN: Value is within a range
+- NOT BETWEEN: Value is not within a range
+- IN: Value matches any value in a list
+- NOT IN: Value does not match any value in a list
+
+5. *String Matching Operators:*
+
+- ~ or ~*: Matches a regular expression pattern (case-sensitive or case-insensitive)
+- !~ or !~*: Does not match a regular expression pattern (case-sensitive or case-insensitive)
+
+6. *Array Operators:*
+
+- ANY: Value matches any value in an array
+- ALL: Value matches all values in an array
+
+7. *Subqueries:*
+
+- IN: Value is in the result of a subquery
+- NOT IN: Value is not in the result of a subquery
+- EXISTS: Checks if a subquery returns any rows
 
 
