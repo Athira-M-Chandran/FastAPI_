@@ -603,3 +603,186 @@ where id=2;
 - EXISTS: Checks if a subquery returns any rows
 
 
+### Databases - SQL Operators
+
+1. **Arithmetic Operators:** 
+- `+` : Addition
+- `-` : Subtraction
+- `*` : Multiplication
+- `%` : Modulo
+- `+` (unary): positive value
+- `-` (unary) :Negative value
+2. **Comparison Operator**
+- `=` : Equal to
+- `<>` or `!=` : Not equal to
+- `<` : Less than
+- `>` : Greater than
+- `<=` : Less than or equal to
+- `>=` : Greater than or equal to
+- `BETWEEN` : Value is within a range
+- `LIKE` : Pattern matching(with wildcard characters)
+- `IN` : Value matches any values in a list
+- `IS NULL` : Value is null
+- `IS NOT NULL` : value is not null
+3. **Logical operators**
+- `AND` - Logical AND
+- `OR` - Logical OR
+- `NOT` - LogicalNOT
+- `ALL` - TRUE if all of the subquery values meet the condition
+- `ANY` - TRUE if any of the subquery values meet the condition
+- `EXISTS` - TRUE if subquery returns one or more records
+- `SOME` - TRUE if any ofthe subquery values meet the condition
+4. **String Operators**
+- `||` - Concatenation
+- `LIKE` - Pattern matching
+- `ILIKE` - Case insensitive pattern matching
+- `SUBSTRING` - Extracts a substring from a string
+5. **Set Operations**
+- `UNION` -Combines result set and removes duplicates
+- `UNION ALL` - Combines results sets without removing duplicates
+- `INTERSECT` -Retrieves common rows from two results sets
+- `EXCEPT` or `MINUS` - Retrieves rows from the first result set that are not in the second result set.
+6. **NULL- related Operators**
+- `IS NULL` : Checks if a value is null
+- `IS NOT NULL` : Checks if a value is not NULL
+- `COALESCE` : Returns the first non-null value from a list
+7. **Bitwise Operator**
+-  `&` - Bitwise AND
+- `|` - Bitwise OR
+- `^` - Bitwise Exculsive OR
+
+### Databases - IN Keyword
+
+> In SQL, the `IN` keyword is used to check if a value matches any value in a list or a subquery. It is often used in the `WHERE` clause to filter rows based on a specified set of values.
+
+Examples
+
+- Using a list of values:
+
+`SELECT * FROM customers WHERE country IN ('USA', 'Canada', 'UK');`
+    This query retrieves all rows from the "customers" table where the "country" column has a value that matches any of the values in the list ('USA', 'Canada', 'UK').
+
+- Using a subquery:
+
+`SELECT * FROM orders WHERE customer_id IN (SELECT id FROM customers WHERE country = 'USA');`
+    This query retrieves all rows from the "orders" table where the "customer_id" column has a value that matches any of the IDs returned by the subquery.
+
+### Databases - Pattern matching with LIKE keyword
+
+> In SQL, the `LIKE` keyword is used for pattern matching within character strings. It allows you to search for values that match a specific pattern using wildcard characters.
+
+1. **Using wildcard characters** :
+- `%` - Matches any sequence of characters
+- `_` - Matches any single character
+
+Examples:
+
+`SELECT * FROM customers WHERE name LIKE 'J%';`
+
+2. **Combining wildcard characters:**
+
+`SELECT * FROM customers WHERE name LIKE 'S_m_';`
+
+3. **Using character ranges:** :
+
+`SELECT * FROM customers WHERE name LIKE '[A-C]%';`
+
+`SELECT * FROM customers WHERE name ~ '^[A-C].*';` In PostgreSQL
+
+### Databases - Ordering Results
+
+> In SQL, you can order the results of a query using the `ORDER BY` clause. The `ORDER BY` clause allows you to specify one or more columns by which the result set should be sorted, either in ascending (default) or descending order.
+
+```
+SELECT column1, column2, ...
+FROM table_name
+ORDER BY column1 [ASC|DESC], column2 [ASC|DESC], ...
+```
+
+example:
+
+```
+SELECT * FROM customers
+ORDER BY age DESC, name ASC;
+```
+### Databases - LIMIT & OFFSET
+
+> In SQL, the `LIMIT` and `OFFSET` clauses are used to control the number of rows returned by a query and to skip a certain number of rows, respectively. These clauses are often used together to implement pagination or to retrieve a subset of results from a larger dataset.
+
+1. **LIMIT**: The `LIMIT` clause is used to specify the maximum number of rows to be returned by a query. It restricts the result set to a certain number of rows. The syntax for the `LIMIT` clause is as follows:
+
+```
+SELECT column1, column2, ...
+FROM table_name
+LIMIT number_of_rows;
+```
+
+example 
+```
+SELECT * FROM customers
+LIMIT 5;
+```
+2. `OFFSET`: The `OFFSET` clause is used to skip a specified number of rows before starting to return the rows. It is often used in combination with `LIMIT` to implement pagination. The syntax for the `OFFSET` clause is as follows:
+```
+SELECT column1, column2, ...
+FROM table_name
+OFFSET number_of_rows_to_skip;
+```
+Example
+```
+SELECT * FROM customers
+OFFSET 5
+LIMIT 5;
+```
+
+### Databases - Inserting Data
+
+Create table - 
+```
+CREATE TABLE customer (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100),
+    email VARCHAR(100),
+    age INT
+);
+```
+
+Inserting data
+
+>When working with databases, inserting data is a common operation that allows you to add new records to a table. In SQL, you can use the `INSERT INTO` statement to insert data into a table. Here's the basic syntax:
+```
+INSERT INTO table_name (column1, column2, ...)
+VALUES (value1, value2, ...);
+```
+
+### Databases - Deleting Data
+
+> When working with databases, deleting data is a common operation to remove records from a table. In SQL, you can use the `DELETE` statement to delete data from a table. Here's the basic syntax:
+```
+DELETE FROM table_name
+WHERE condition;
+```
+example :
+```
+DELETE FROM customers
+WHERE age >= 30 AND city = 'New York';
+```
+
+### Databases - Updating Data
+
+> When working with databases, updating data is a common operation that allows you to modify existing records in a table. In SQL, you can use the `UPDATE` statement to update data in a table. Here's the basic syntax:
+```
+UPDATE table_name
+SET column1 = value1, column2 = value2, ...
+WHERE condition;
+```
+
+```UPDATE customers
+SET email = 'newemail@example.com', age = 35
+WHERE customer_id = 3;```
+
+
+
+
+
+
