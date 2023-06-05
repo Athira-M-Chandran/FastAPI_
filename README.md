@@ -787,8 +787,217 @@ RETURNING *;
 ```
 > Use the `RETURNING` clause to return the updated rows from the UPDATE statement
 
+## Section 5: Python + Raw SQL - Setup App Database
 
+To set up a database for your Python application, you'll need to perform a few steps. Here's a general outline of the process:
 
+1. *Install the required database driver*: Depending on the database you're using, you'll need to install the appropriate Python library or driver. For example, if you're using PostgreSQL, you can install the `psycopg2` library by running `pip install psycopg2`.
+2. *Connect to the database* : In your Python application, you'll need to establish a connection to the database using the appropriate connection parameters. These parameters typically include the host, port, database name, username, and password. Here's an example of connecting to a PostgreSQL database:
+```
+import psycopg2
+
+conn = psycopg2.connect(
+    host="localhost",
+    port="5432",
+    database="mydatabase",
+    user="myuser",
+    password="mypassword"
+)
+```
+
+3. *Create a cursor*: After establishing a connection, you'll need to create a cursor object. The cursor allows you to execute SQL queries and interact with the database.
+
+```
+cursor = conn.cursor()
+```
+4. *Execute SQL queries*: With the cursor, you can execute SQL queries to create tables, insert data, update records, and perform other operations. Here's an example of creating a table:
+
+```
+create_table_query = """
+    CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(50),
+        email VARCHAR(100),
+        password VARCHAR(100)
+    );
+"""
+
+cursor.execute(create_table_query)
+```
+5. *Commit the changes*: After executing the SQL queries, you need to commit the changes to make them persistent in the database.
+```
+conn.commit()
+```
+6. *Close the cursor and connection*: Once you're done working with the database, it's important to close the cursor and connection to release the resources.
+```
+cursor.close()
+conn.close()
+```
+
+### Python + Raw SQL - Connecting to database w/ Python
+
+To connect to a database using Python and execute raw SQL queries, you can use the appropriate database library or driver for the database you're working with. Here are examples of connecting to different databases using raw SQL in Python:
+
+1. Connecting to PostgreSQL using psycopg2:
+
+```
+import psycopg2
+
+# Establish a connection to the PostgreSQL database
+conn = psycopg2.connect(
+    host="localhost",
+    port="5432",
+    database="mydatabase",
+    user="myuser",
+    password="mypassword"
+)
+
+# Create a cursor
+cursor = conn.cursor()
+
+# Execute SQL queries
+cursor.execute("SELECT * FROM users")
+rows = cursor.fetchall()
+for row in rows:
+    print(row)
+
+# Commit changes and close the cursor and connection
+conn.commit()
+cursor.close()
+conn.close()
+```
+
+2. Connecting to MySQL using mysql-connector-python:
+
+```
+import mysql.connector
+
+# Establish a connection to the MySQL database
+conn = mysql.connector.connect(
+    host="localhost",
+    port="3306",
+    database="mydatabase",
+    user="myuser",
+    password="mypassword"
+)
+
+# Create a cursor
+cursor = conn.cursor()
+
+# Execute SQL queries
+cursor.execute("SELECT * FROM users")
+rows = cursor.fetchall()
+for row in rows:
+    print(row)
+
+# Commit changes and close the cursor and connection
+conn.commit()
+cursor.close()
+conn.close()
+```
+
+3. Connecting to SQLite using sqlite3 (built-in module in Python):
+
+```
+import sqlite3
+
+# Establish a connection to the SQLite database
+conn = sqlite3.connect("mydatabase.db")
+
+# Create a cursor
+cursor = conn.cursor()
+
+# Execute SQL queries
+cursor.execute("SELECT * FROM users")
+rows = cursor.fetchall()
+for row in rows:
+    print(row)
+
+# Commit changes and close the cursor and connection
+conn.commit()
+cursor.close()
+conn.close()
+```
+### Python + Raw SQL - Retrieving Posts
+
+```
+import psycopg2
+
+# Establish a connection to the PostgreSQL database
+conn = psycopg2.connect(
+    host="localhost",
+    port="5432",
+    database="mydatabase",
+    user="myuser",
+    password="mypassword"
+)
+
+# Create a cursor
+cursor = conn.cursor()
+
+# Execute the SELECT query to retrieve posts
+select_query = "SELECT * FROM posts;"
+cursor.execute(select_query)
+
+# Fetch all rows from the result
+rows = cursor.fetchall()
+
+# Process the retrieved posts
+for row in rows:
+    post_id = row[0]
+    title = row[1]
+    content = row[2]
+    # Perform any required operations with the retrieved data
+    print(f"Post ID: {post_id}")
+    print(f"Title: {title}")
+    print(f"Content: {content}")
+    print()
+
+# Commit changes and close the cursor and connection
+conn.commit()
+cursor.close()
+conn.close()
+```
+
+### Python + Raw SQL - Creating Post
+
+```
+import psycopg2
+
+# Establish a connection to the PostgreSQL database
+conn = psycopg2.connect(
+    host="localhost",
+    port="5432",
+    database="mydatabase",
+    user="myuser",
+    password="mypassword"
+)
+
+# Create a cursor
+cursor = conn.cursor()
+
+# Define the SQL statement for inserting a new post
+insert_query = """
+    INSERT INTO posts (title, content)
+    VALUES (%s, %s)
+"""
+
+# Define the data for the new post
+post_title = "My First Post"
+post_content = "This is the content of my first post."
+
+# Execute the INSERT statement with the data
+cursor.execute(insert_query, (post_title, post_content))
+
+# Commit the changes to the database
+conn.commit()
+
+# Close the cursor and connection
+cursor.close()
+conn.close()
+```
+
+[Refer](db1.py)
 
 
 
