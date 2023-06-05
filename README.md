@@ -660,11 +660,13 @@ Examples
 - Using a list of values:
 
 `SELECT * FROM customers WHERE country IN ('USA', 'Canada', 'UK');`
+
     This query retrieves all rows from the "customers" table where the "country" column has a value that matches any of the values in the list ('USA', 'Canada', 'UK').
 
 - Using a subquery:
 
 `SELECT * FROM orders WHERE customer_id IN (SELECT id FROM customers WHERE country = 'USA');`
+
     This query retrieves all rows from the "orders" table where the "customer_id" column has a value that matches any of the IDs returned by the subquery.
 
 ### Databases - Pattern matching with LIKE keyword
@@ -777,9 +779,13 @@ SET column1 = value1, column2 = value2, ...
 WHERE condition;
 ```
 
-```UPDATE customers
+```
+UPDATE customers
 SET email = 'newemail@example.com', age = 35
-WHERE customer_id = 3;```
+WHERE customer_id = 3;
+RETURNING *;
+```
+> Use the `RETURNING` clause to return the updated rows from the UPDATE statement
 
 
 
