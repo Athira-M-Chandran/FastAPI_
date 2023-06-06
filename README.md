@@ -999,5 +999,130 @@ conn.close()
 
 [Refer](db1.py)
 
+### Python + Raw SQL - Get One Post
+```
+import psycopg2
 
+# Establish a connection to the PostgreSQL database
+conn = psycopg2.connect(
+    host="localhost",
+    port="5432",
+    database="mydatabase",
+    user="myuser",
+    password="mypassword"
+)
+
+# Create a cursor
+cursor = conn.cursor()
+
+# Define the SQL statement for retrieving a single post
+select_query = """
+    SELECT * FROM posts
+    WHERE post_id = %s
+"""
+
+# Define the ID of the post you want to retrieve
+post_id = 1
+
+# Execute the SELECT statement with the post ID
+cursor.execute(select_query, (post_id,))
+
+# Fetch the first row from the result
+row = cursor.fetchone()
+
+# Process the retrieved post
+if row:
+    post_id = row[0]
+    title = row[1]
+    content = row[2]
+    # Perform any required operations with the retrieved data
+    print(f"Post ID: {post_id}")
+    print(f"Title: {title}")
+    print(f"Content: {content}")
+else:
+    print("Post not found.")
+
+# Close the cursor and connection
+cursor.close()
+conn.close()
+```
+[Refer](db2_getonepost.py)
+
+### Python + Raw SQL - Delete Post
+```
+import psycopg2
+
+# Establish a connection to the PostgreSQL database
+conn = psycopg2.connect(
+    host="localhost",
+    port="5432",
+    database="mydatabase",
+    user="myuser",
+    password="mypassword"
+)
+
+# Create a cursor
+cursor = conn.cursor()
+
+# Define the SQL statement for deleting a post by its ID
+delete_query = """
+    DELETE FROM posts
+    WHERE post_id = %s
+"""
+
+# Define the ID of the post to be deleted
+post_id = 1
+
+# Execute the DELETE statement with the post ID
+cursor.execute(delete_query, (post_id,))
+
+# Commit the changes to the database
+conn.commit()
+
+# Close the cursor and connection
+cursor.close()
+conn.close()
+```
+[Refer](db3_delete.py)
+
+### Python + Raw SQL - Update Post
+
+```
+import psycopg2
+
+# Establish a connection to the PostgreSQL database
+conn = psycopg2.connect(
+    host="localhost",
+    port="5432",
+    database="mydatabase",
+    user="myuser",
+    password="mypassword"
+)
+
+# Create a cursor
+cursor = conn.cursor()
+
+# Define the SQL statement for updating a post by its ID
+update_query = """
+    UPDATE posts
+    SET title = %s, content = %s
+    WHERE post_id = %s
+"""
+
+# Define the new values for the post
+new_title = "Updated Title"
+new_content = "Updated content of the post"
+post_id = 1
+
+# Execute the UPDATE statement with the new values and post ID
+cursor.execute(update_query, (new_title, new_content, post_id))
+
+# Commit the changes to the database
+conn.commit()
+
+# Close the cursor and connection
+cursor.close()
+conn.close()
+```
+[Refer](db4_update.py)
 
