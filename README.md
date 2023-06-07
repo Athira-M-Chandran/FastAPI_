@@ -1127,3 +1127,142 @@ conn.close()
 [Refer](db4_update.py)
 
 [Refer(using api)](database_api.py)
+
+## Section 6: ORMs - ORM intro
+
+> ORM stands for **Object-Relational Mapping**. It is a programming technique used to map objects in an object-oriented programming language (like Python) to database tables in a relational database management system (such as MySQL, PostgreSQL, or SQLite). ORM provides a higher-level abstraction that allows developers to interact with databases using objects and their relationships, rather than writing raw SQL queries.
+
+With an ORM, you can define your database schema and relationships using classes and objects, and the ORM library handles the mapping and translation of these objects to the corresponding database tables and queries. The ORM takes care of generating the SQL queries, executing them, and retrieving the results, making database operations more intuitive and easier to work with.
+
+Here are some benefits of using an ORM:
+
+1. *Simplified database interactions*: With ORM, you can perform database operations using familiar programming language constructs, such as classes, objects, and methods. This abstraction simplifies the code and makes it more readable and maintainable.
+
+2. *Cross-database compatibility*: ORM frameworks often support multiple database systems, allowing you to switch between different databases without changing your code significantly.
+
+3. *Data modeling* : ORM frameworks provide tools and techniques to define the structure of your data in the form of models or classes. These models represent database tables and their relationships, making it easier to manage and maintain the data schema.
+
+4. *Query abstraction*: ORM frameworks typically offer a high-level query language or API that abstracts away the underlying SQL syntax. This allows you to write database queries using object-oriented syntax, making them more concise and less error-prone.
+
+5. *Automatic data mapping*: ORM frameworks handle the mapping between database tables and objects automatically. They map the columns of a table to the attributes of an object, enabling seamless data retrieval and manipulation.
+
+Popular ORM frameworks in Python include **SQLAlchemy**, **Django ORM** (part of the Django web framework), and **Peewee**. Each ORM has its own features, syntax, and usage patterns, so it's important to choose the one that best fits your project requirements.
+
+With ORM, you can focus more on your application's business logic and less on the low-level details of database operations. It simplifies database interactions, improves code organization, and enhances developer productivity.
+
+### ORMs - SQLALCHEMY setup
+
+1. *Install SQLAlchemy*: You can install SQLAlchemy using pip, the Python package manager. Open your terminal or command prompt and run the following command:
+```
+pip install SQLAlchemy
+```
+
+2. *Import SQLAlchemy*: In your Python script or application, import the SQLAlchemy module to use its functionalities. Typically, you'll import it as follows:
+```
+from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+```
+
+3. *Establish a Database Connection*: Create an engine object that represents the database connection. The engine object defines the database URL and other configuration details. For example, to connect to a PostgreSQL database locally, you can use the following code:
+```
+engine = create_engine('postgresql://username:password@localhost/mydatabase')
+```
+
+4. *Define a Base Model*: In SQLAlchemy, you typically define a base model class that other models will inherit from. This base model class will provide common functionality and configuration. For example:
+```
+Base = declarative_base()
+```
+
+5. *Define Models*: Define your database models by creating Python classes that inherit from the base model class. Each class represents a table in the database, and each attribute represents a column. For example:
+```
+class User(Base):
+    __tablename__ = 'users'
+    
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50))
+    email = Column(String(100))
+```
+
+6. *Create Tables*: Once you have defined your models, you need to create the corresponding tables in the database. SQLAlchemy provides a feature called "schema generation" that can automatically create the tables based on your model definitions. To create the tables, use the following code:
+```
+Base.metadata.create_all(engine)
+
+```
+
+7. *Create a Session*: To interact with the database, you need to create a session object. The session object acts as a middleman between your code and the database. Use the following code to create a session:
+```
+Session = sessionmaker(bind=engine)
+session = Session()
+```
+
+[Refer](sqlalchemy_setup.py)
+
+### ORMs - Adding CreatedAt Column
+
+> If the table already exists and you want to add the created_at column to the existing table, you can use a database migration tool like Alembic to apply the changes.
+
+1. Install Alembic:
+```
+pip install alembic
+```
+2. Set up Alembic: 
+
+Initialize Alembic by running the following command in your project directory:
+```
+alembic init alembic
+```
+
+This will create an `alembic` directory with configuration files and folders.
+3. Create a migration script:
+
+Inside the `alembic/versions` directory, create a new migration script. The name of the script should reflect the purpose of the migration. For example, you can name it something like `add_created_at_column.py`. Open the script file and define the migration operations.
+
+Here's an example migration script that adds the created_at column to an existing table:
+```
+from alembic import op
+import sqlalchemy as sa
+
+from sqlalchemy import create_engine
+import urllib.parse
+from datetime import datetime
+
+revision_id = datetime.now().strftime("%Y%m%d%H%M%S")
+create_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+# Set the revision ID and create date
+revision = 'your_revision_id'
+down_revision = None
+create_date = 'your_create_date'
+
+password = urllib.parse.quote_plus('a@bcd')
+# Create the connection string with the encoded password
+connection_string = f'postgresql://user:{password}@localhost/dbname'
+
+# Create the engine
+engine = create_engine(connection_string)
+
+# The table name and column name need to be adjusted according to your existing table structure
+table_name = 'your_table'
+column_name = 'created_at'
+
+
+def upgrade():
+    op.add_column(table_name, sa.Column(column_name, sa.DateTime))
+
+
+def downgrade():
+    op.drop_column(table_name, column_name)
+```
+
+4. Edit the alembic.ini file in the alembic directory. Update the sqlalchemy.url setting with your database connection string. For example:
+
+```
+sqlalchemy.url = postgresql://your_user:your-password@localhost/your-databasename
+```
+
+5. Run the migration:
+```
+alembic upgrade head
+```
+[refer](alembic/versions/add_created_at_column.py)
