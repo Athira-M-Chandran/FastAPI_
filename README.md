@@ -1266,3 +1266,127 @@ sqlalchemy.url = postgresql://your_user:your-password@localhost/your-databasenam
 alembic upgrade head
 ```
 [refer](alembic/versions/add_created_at_column.py)
+
+### ORMs - Create Posts
+
+1. *Import the necessary modules and classes:*
+```
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from models import Post  # Assuming you have defined a Post model class
+```
+
+2. *Create an engine to connect to your database:*
+```
+engine = create_engine('postgresql://user:password@localhost/database_name')
+```
+3. *Create a session factory:*
+```
+Session = sessionmaker(bind=engine)
+```
+
+4. *Create a session:*
+```
+session = Session()
+```
+5. *Create new posts:*
+```
+post1 = Post(title='First Post', content='This is the content of the first post.')
+post2 = Post(title='Second Post', content='This is the content of the second post.')
+
+```
+6. *Add the new posts to the session:*
+```
+session.add(post1)
+session.add(post2)
+```
+7. *Commit the changes to the database:*
+```
+session.commit()
+```
+8. *Close the session:*
+```
+session.close()
+```
+[Refer](sqlalchemy_post.py)
+
+### ORMs - Get All Posts
+
+To retrieve all posts from a database table using an ORM like SQLAlchemy, you can follow these steps:
+
+1. *Import the necessary modules and classes:*
+```
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from models import Post  # Assuming you have defined a Post model class
+
+```
+2. *Create an engine to connect to your database:*
+```
+engine = create_engine('postgresql://user:password@localhost/database_name')
+```
+3. *Create a session factory:*
+```
+Session = sessionmaker(bind=engine)
+```
+4. *Create a session:*
+```
+session = Session()
+```
+5. *Retrieve all posts from the database:*
+```
+posts = session.query(Post).all()
+```
+This query retrieves all rows from the `Post` table and returns them as a list of `Post` objects.
+6. *Access the retrieved posts:*
+```
+for post in posts:
+    print(post.title)
+    print(post.content)
+    print("---")
+```
+7. *Close the session:*
+```
+session.close()
+```
+[refer](sqlalchemy_get.py)
+
+### ORMs - Get Post by ID
+
+1. *Import the necessary modules and classes:*
+```
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from models import Post  # Assuming you have defined a Post model class
+
+```
+2. *Create an engine to connect to your database:*
+```
+engine = create_engine('postgresql://user:password@localhost/database_name')
+```
+3. *Create a session factory:*
+```
+Session = sessionmaker(bind=engine)
+```
+4. *Create a session:*
+```
+session = Session()
+```
+5. *Retrieve a post by its ID:*
+```
+post_id = 1  # Replace 1 with the desired ID
+post = session.query(Post).get(post_id)
+```
+6. *Access the retrieved post:*
+```
+if post is not None:
+    print(post.title)
+    print(post.content)
+else:
+    print("Post not found.")
+```
+7. *Close the session:*
+```
+session.close()
+```
+[Refer](sqlalchemy_getbyID.py)
