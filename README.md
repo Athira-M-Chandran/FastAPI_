@@ -1682,6 +1682,10 @@ book = Book(title="My Book", authors=[{"name": "Author 1"}, {"name": "Author 2"}
 print(book.title)  # Output: My Book
 print(book.authors[0].name)  # Output: Author 1
 ```
+8. **Customizing Pydantic Models:**
+
+- You can customize Pydantic models by overriding built-in methods or adding custom methods and properties.
+
 ### Pydantic Models - Response Model
 
 To define a Pydantic model as a response model, follow these steps:
@@ -1725,7 +1729,3 @@ Note that when using `response_model`, FastAPI will automatically validate the r
 
 
 
-8. **Customizing Pydantic Models:**
-
-- You can customize Pydantic models by overriding built-in methods or adding custom methods and properties.
-9. 
