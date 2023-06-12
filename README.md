@@ -1613,7 +1613,117 @@ product = Product(**product_data)  # Raises a ValidationError
 
 - Pydantic models can have nested models to represent complex data structures and relationships.
 - Use the nested model's class name as the attribute type to define a relationship between models.
+```
+from pydantic import BaseModel
+
+class Address(BaseModel):
+    street: str
+    city: str
+    postal_code: str
+
+class Person(BaseModel):
+    name: str
+    age: int
+    address: Address
+```
+In this example, the `Person` model has a nested `Address` model as a field. When creating a `Person` instance, you can provide the address details as a nested dictionary.
 - Pydantic supports one-to-one, one-to-many, and many-to-many relationships between models.
+
+a. *One-to-One Relationship*: each instance of one model is associated with exactly one instance of another model.
+```
+from pydantic import BaseModel
+
+class User(BaseModel):
+    username: str
+    password: str
+
+class Profile(BaseModel):
+    user: User
+    bio: str
+```
+In this example, the `Profile` model has a one-to-one relationship with the `User` model, where each profile is associated with a single user.
+
+b. *One-to-Many Relationship*: each instance of one model can be associated with multiple instances of another model.
+```
+from pydantic import BaseModel
+
+class Author(BaseModel):
+    name: str
+
+class Book(BaseModel):
+    title: str
+    authors: List[Author]
+```
+c. *Many-to-Many Relationship:* instances of one model can be associated with multiple instances of another model, and vice versa.
+
+```
+from pydantic import BaseModel
+
+class Category(BaseModel):
+    name: str
+
+class Product(BaseModel):
+    name: str
+    categories: List[Category]
+```
+In this example, the `Product` model has a many-to-many relationship with the `Category` model, where each product can be associated with multiple categories, and each category can be associated with multiple products.
+
+Accessing Nested Models and Relationships:
+
+When working with nested models and relationships, you can access the nested fields and relationships using dot notation.
+```
+person = Person(name="John", age=30, address={"street": "123 Main St", "city": "New York", "postal_code": "12345"})
+print(person.name)  # Output: John
+print(person.address.city)  # Output: New York
+```
+using dot notation.
+```
+book = Book(title="My Book", authors=[{"name": "Author 1"}, {"name": "Author 2"}])
+print(book.title)  # Output: My Book
+print(book.authors[0].name)  # Output: Author 1
+```
+### Pydantic Models - Response Model
+
+To define a Pydantic model as a response model, follow these steps:
+
+1. Import the necessary modules:
+```
+from fastapi import FastAPI
+from pydantic import BaseModel
+```
+2. Define the Pydantic model for the response:
+```
+class Item(BaseModel):
+    name: str
+    price: float
+```
+3. Create a FastAPI application instance:
+```
+app = FastAPI()
+```
+4. Define an endpoint that returns the response model:
+```
+@app.get("/items/{item_id}")
+def read_item(item_id: int):
+    item = fetch_item_from_database(item_id)
+    return item
+```
+In this example, the `read_item` endpoint returns an `Item` object, which is a Pydantic model. The response data will be automatically serialized to JSON based on the structure of the `Item` model.
+
+If you want to explicitly specify the response model in the endpoint function signature, you can use the `response_model` parameter:
+```
+from fastapi import Response
+
+@app.get("/items/{item_id}", response_model=Item)
+def read_item(item_id: int):
+    item = fetch_item_from_database(item_id)
+    return item
+```
+Note that when using `response_model`, FastAPI will automatically validate the returned data against the specified response model and raise an error if the data does not match the model's structure or validation rules.
+
+> By using Pydantic models as response models in FastAPI, you can ensure consistent and well-structured responses from your API endpoints. The response data will be automatically serialized, and you can take advantage of Pydantic's powerful validation capabilities to ensure the correctness and integrity of the returned data.
+
+
 
 8. **Customizing Pydantic Models:**
 
