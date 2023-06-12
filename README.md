@@ -1390,3 +1390,232 @@ else:
 session.close()
 ```
 [Refer](sqlalchemy_getbyID.py)
+
+### ORMs - Delete Post
+
+1. *Import the necessary modules and classes:*
+```
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from models import Post  # Assuming you have defined a Post model class
+
+```
+2. *Create an engine to connect to your database:*
+```
+engine = create_engine('postgresql://user:password@localhost/database_name')
+```
+3. *Create a session factory:*
+```
+Session = sessionmaker(bind=engine)
+```
+4. *Create a session:*
+```
+session = Session()
+```
+5. *Retrieve a post by its ID:*
+```
+post_id = 1  # Replace 1 with the desired ID
+post = session.query(Post).get(post_id)
+```
+6. *Query and delete the post by its ID*
+```
+if post is not None:
+    session.delete(post)
+    print("Post deleted successfully)
+else:
+    print("Post not found.")
+```
+7. *Close the session:*
+```
+session.close()
+```
+[Refer](sqlalchemy_delete.py)
+
+### ORMs - Update Post
+1. *Import the necessary modules and classes:*
+```
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from models import Post  # Assuming you have defined a Post model class
+
+```
+2. *Create an engine to connect to your database:*
+```
+engine = create_engine('postgresql://user:password@localhost/database_name')
+```
+3. *Create a session factory:*
+```
+Session = sessionmaker(bind=engine)
+```
+4. *Create a session:*
+```
+session = Session()
+```
+5. *Retrieve a post by its ID:*
+```
+post_id = 1  # Replace 1 with the desired ID
+post = session.query(Post).get(post_id)
+```
+6. *Update the post by its ID:*
+```
+if post is not None:
+    post.title = "New Title"
+    post.content = "New Content"
+    session.commit()
+    print("Post updated successfully.")
+else:
+    print("Post not found.")
+```
+7. *Close the session:*
+```
+session.close()
+```
+[Refer](sqlalchemy_delete.py)
+
+#### Query with join
+query = session.query(User, Post).join(Post)
+
+#### Query with condition
+query = session.query(User).filter(User.username.like('A%'))
+
+#### Perform the aggregation and grouping
+query = session.query(User.username, func.avg(User.age)).group_by(User.username)
+
+## Section 7: Pydantic Models - Pydantic vs ORM Models
+
+#### Pydantic Models:
+- Pydantic is a **data validation** and **serialization library** that helps you define data schemas and perform input validation.
+
+- Pydantic models are primarily used for **input validation**, **data parsing**, and **serialization/deserialization** of data in APIs or other data processing tasks.
+
+- Pydantic models **define the structure and constraints of the data**, including data types, required fields, default values, and validation rules.
+
+- Pydantic models provide powerful validation features such as **type validation**, **field validation**, and **custom validation** functions.
+
+- Pydantic models are **not directly connected to a database**. They focus on input/output operations and data transformation rather than persisting data in a database.
+
+- Pydantic models are typically **used in API frameworks** like FastAPI, where they help validate incoming requests and automatically parse and serialize data.
+
+#### ORM Models:
+
+- ORM (Object-Relational Mapping) models are **used for mapping database tables to Python objects**.
+- ORM models represent the **structure of database tables** and provide an abstraction layer that allows you to interact with the database using Python objects and methods.
+- ORM models define the **schema of the database tables**, including fields, relationships, constraints, and indexes.
+- ORM models provide features for **querying, creating, updating, and deleting data in the database** using object-oriented syntax.
+- ORM models are tightly coupled to the underlying database and provide a way to **perform complex database operations** using Python code.
+- ORM models are commonly used in frameworks like SQLAlchemy, Django ORM, or Peewee for interacting with relational databases.
+
+> In summary, Pydantic models focus on data validation and serialization/deserialization tasks, while ORM models focus on mapping database tables to Python objects and providing database operations. Both Pydantic and ORM models have their own use cases and can be used together in an application to handle different aspects of data validation, serialization, and database interaction.
+
+### Pydantic Models - Pydantic Models Deep Dive
+
+1. **Defining Pydantic Models:**
+
+> To create a Pydantic model, you need to define a Python class that inherits from the pydantic.BaseModel class. Inside the class, you define attributes with their types, optionally specifying additional validation rules using Pydantic's field types and validators.
+```
+from pydantic import BaseModel
+
+class Person(BaseModel):
+    name: str
+    age: int
+    email: str
+```
+
+2. **Field Types:**
+
+Pydantic provides various field types that can be used to define the attributes of a model. Some commonly used field types include:
+
+- str: Represents a string.
+- int: Represents an integer.
+- float: Represents a floating-point number.
+- bool: Represents a boolean value.
+- List[Type]: Represents a list of elements of a specified type.
+- Dict[str, Type]: Represents a dictionary with string keys and values of a specified type.
+- datetime.datetime: Represents a date and time.
+
+These field types ensure that the provided input data matches the expected type during validation.
+
+3. **Field Validation:**
+
+Pydantic allows you to apply validation rules to the fields in your models. You can use decorators like `@validator` and `@root_validator` to define custom validation functions. Pydantic also provides built-in validators such as `EmailStr`, `UrlStr`, `Length`, and more.
+
+```
+from pydantic import BaseModel, EmailStr
+
+class Person(BaseModel):
+    name: str
+    age: int
+    email: EmailStr
+
+    @validator('age')
+    def check_age(cls, age):
+        if age < 0:
+            raise ValueError("Age cannot be negative")
+        return age
+```
+4. **Model Validation:**
+
+To validate input data against a Pydantic model, you can create an instance of the model and pass the input data as a dictionary. Pydantic will validate the data, perform type conversions, and raise validation errors if the data does not conform to the model's schema.
+```
+person_data = {
+    "name": "John Doe",
+    "age": 25,
+    "email": "john.doe@example.com"
+}
+
+person = Person(**person_data)
+```
+If the input data is invalid, a `ValidationError` will be raised, providing details about the validation errors.
+5. **Data Serialization:**
+
+Pydantic models support automatic serialization to and deserialization from various formats, including JSON, dictionaries, and more. You can use the model's `dict()` method to serialize the model instance to a dictionary, or the `json()` method to serialize it to a JSON string.
+```
+person_dict = person.dict()
+person_json = person.json()
+```
+Pydantic also provides the `parse_obj()` and `parse_raw()` methods to create model instances from dictionaries or raw input data, respectively.
+
+6. **Data Conversion and Coercion:**
+- Pydantic models can automatically convert and coerce data to the specified types.
+```
+person_data = {
+    "name": "John Doe",
+    "age": "25",  # str value
+    "price": 99  # Coerced from int to float
+}
+
+person = Person(**person_data)
+print(person.age)  # Output: 25 (converted to int)
+print(person.price)  # Output: 99.0 (coerced to float)
+```
+- Built-in type conversion includes parsing strings to integers, floats, booleans, dates, and times.
+- Strict Data Validation.
+```
+from pydantic import BaseModel, Field
+
+class Product(BaseModel):
+    name: str
+    price: float
+
+    class Config:
+        strict = True
+
+product_data = {
+    "name": "Product 1",
+    "price": "99"  # Not directly assignable to float
+}
+
+product = Product(**product_data)  # Raises a ValidationError
+```
+- You can define custom conversion functions using the `@root_validator` decorator.
+
+7. **Nested Models and Relationships:**
+
+- Pydantic models can have nested models to represent complex data structures and relationships.
+- Use the nested model's class name as the attribute type to define a relationship between models.
+- Pydantic supports one-to-one, one-to-many, and many-to-many relationships between models.
+
+8. **Customizing Pydantic Models:**
+
+- You can customize Pydantic models by overriding built-in methods or adding custom methods and properties.
+9. 
