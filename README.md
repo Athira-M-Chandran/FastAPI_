@@ -1727,5 +1727,20 @@ Note that when using `response_model`, FastAPI will automatically validate the r
 
 > By using Pydantic models as response models in FastAPI, you can ensure consistent and well-structured responses from your API endpoints. The response data will be automatically serialized, and you can take advantage of Pydantic's powerful validation capabilities to ensure the correctness and integrity of the returned data.
 
+## Section 8: Authentication & Users - Creating Users Table
 
+```
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+[Refer](auth_create_users.py)
+
+### Authentication & Users - User Registration Path Operation
 
