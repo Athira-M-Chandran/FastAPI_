@@ -1744,3 +1744,140 @@ CREATE TABLE users (
 
 ### Authentication & Users - User Registration Path Operation
 
+[Refer](auth_user_reg.py)
+
+### Authentication & Users - Hashing User Passwords
+
+> When it comes to user authentication, it is crucial to securely store user passwords to protect them from unauthorized access. One common practice is to hash passwords using a strong **cryptographic hashing algorithm** combined with a random salt.
+
+1. Generate a random salt for each user:
+- When a user creates an account or changes their password, generate a random string of sufficient length (e.g., 16 bytes) to serve as the salt.
+- The salt should be unique for each user and stored alongside their hashed password.
+2. Concatenate the user's password with the salt:
+- Append the salt to the user's password, forming a new string.
+3. Apply a secure cryptographic hash function:
+- Use a strong hashing algorithm like `bcrypt`, `Argon2`, or `scrypt` to hash the concatenated string.
+- Ensure that the algorithm is well-suited for password hashing, designed to be computationally expensive to `thwart brute-force attacks`.
+4. Store the salt and hashed password in the database:
+- Save both the salt and the resulting hashed password in the user's record in the database.
+- The salt and hashed password should be stored in separate columns.
+
+When authenticating a user, follow these steps:
+1. Retrieve the user's salt and hashed password from the database based on their username or email.
+2. Concatenate the provided password with the stored salt.
+3. Apply the same cryptographic hash function to the concatenated string.
+4. Compare the resulting hash with the stored hashed password.
+5. If the hashes match, the provided password is correct, and the user is authenticated.
+
+
+Here's an example using the bcrypt library to hash passwords in your authentication system:
+
+1. Install the `bcrypt` library: ```pip install bcrypt```
+2. Import the `bcrypt` module in your code: ```import bcrypt```
+3. Modify your `User` model to include a hashed password field:
+```
+from sqlalchemy import Column, String
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
+
+class User(Base):
+    __tablename__ = 'users'
+
+    # ...
+
+    password_hash = Column(String(100), nullable=False)
+```
+4. Update the registration path operation to hash the user password before storing it:
+```
+@app.post("/register")
+def register_users(user_data_list: List[UserRegistrationRequest]):
+    with Session() as session:
+        for user_data in user_data_list:
+            username = user_data.username
+            password = user_data.password
+            email = user_data.email
+
+            # Hash the password
+            password_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+
+            user = User(username=username, email=email, password_hash=password_hash)
+
+            session.add(user)
+
+        session.commit()
+```
+### Authentication & Users - Refractor Hashing Logic
+```
+import bcrypt
+
+class User(Base):
+    # ... other column definitions ...
+
+    def set_password(self, password):
+        password_bytes = password.encode('utf-8')
+        hashed_password = bcrypt.hashpw(password_bytes, bcrypt.gensalt())
+        self.password = hashed_password.decode('utf-8')
+```
+In this updated implementation, the `password` provided is encoded to bytes using the `UTF-8` encoding. The `bcrypt.hashpw()` function is then used to generate the hashed password using the password bytes and a randomly generated salt. The resulting hashed password, which is in bytes, is decoded back to a UTF-8 encoded string and assigned to the `self.password` attribute of the User instance.
+
+[Refer](auth_model_users.py)
+
+### Authentication & Users - Get User by ID
+
+[Refer](auth_user_get.py)
+
+### Authentication & Users - FastAPI Routers
+
+> In FastAPI, you can use routers to **organize** your API routes into separate modules or files. Routers allow you to group related endpoints together and **encapsulate** their functionality. Here's an example of how to create a router for user-related operations:
+
+1. Create a new file named `user_router.py`.
+2. Inside `user_router.py`, import the necessary dependencies:
+```
+from fastapi import APIRouter
+from fastapi import HTTPException
+
+from auth_model_users import User
+from auth_user_connection import Session
+```
+3. Create an instance of `APIRouter`:
+```
+router = APIRouter()
+```
+4. Define your user-related endpoints using the router. For example, you can define a route to get a user by ID:
+```
+@router.get("/users/{user_id}")
+def get_user(user_id: int):
+    with Session() as session:
+        user = session.query(User).get(user_id)
+        if user is None:
+            raise HTTPException(status_code=404, detail="User not found")
+        return user
+```
+You can add more endpoints for user registration, authentication, update, delete, etc.
+
+5. Save the file.
+
+To use the router in your main FastAPI application, import it and include it in the `app` instance:
+```
+from fastapi import FastAPI
+from user_router import router
+
+app = FastAPI()
+
+app.include_router(router)
+```
+
+The main benefit of using routers in FastAPI is organization and modularity. Here are some advantages of using routers:
+
+- **Modularity**: Routers allow you to organize your API routes into separate modules or files. This can improve code maintainability and make it easier to understand and navigate the codebase. Each router can encapsulate a specific set of endpoints related to a particular functionality or resource.
+
+- **Separation of Concerns**: Routers help you separate different parts of your API into logical units. For example, you can have separate routers for user-related endpoints, authentication endpoints, admin endpoints, etc. This separation makes it easier to manage and maintain different parts of your API independently.
+
+- **Code Reusability**: Routers can be reused across multiple FastAPI applications or even in different projects. You can create a reusable router module and import it into multiple applications. This promotes code reuse and avoids duplication of endpoint definitions.
+
+- **Route Prefixing**: Routers allow you to specify a prefix for all the routes defined within the router. This can be useful when you want to group related endpoints under a common URL prefix. It provides a clean and structured URL hierarchy for your API.
+
+### Authentication & Users - Router Prefix
+
+[Refer](auth_user_routerPrefix.py)
