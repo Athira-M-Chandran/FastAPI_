@@ -1881,3 +1881,95 @@ The main benefit of using routers in FastAPI is organization and modularity. Her
 ### Authentication & Users - Router Prefix
 
 [Refer](auth_user_routerPrefix.py)
+
+### Authentication & Users - Router Tags
+
+> FastAPI provides a feature called "tags" that allows you to group and categorize your API endpoints. Tags help with organizing and documenting your API, especially when you have a large number of endpoints.
+
+To add tags to your authentication and user routers, you can use the `tags` parameter when defining your endpoints within the routers.
+```
+from fastapi import FastAPI, APIRouter
+from auth_user_connection import Session
+from auth_model_users import User
+
+app = FastAPI()
+
+auth_router = APIRouter(tags=["Authentication"])
+user_router = APIRouter(tags=["Users"])
+
+@auth_router.post("/login")
+def login():
+    # Authentication logic goes here
+    pass
+
+@user_router.get("/")
+def get_users():
+    with Session() as session:
+        users = session.query(User).all()
+        if not users:
+            raise HTTPException(status_code=404, detail="Users not found")
+        return users
+
+@user_router.get("/{user_id}")
+def get_user(user_id: int):
+    with Session() as session:
+        user = session.query(User).get(user_id)
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        return user
+
+app.include_router(auth_router)
+app.include_router(user_router)
+```
+By default, FastAPI generates an interactive API documentation (Swagger UI) that includes tags to organize the endpoints. You can see the tags in the documentation and use them for navigation.(`http://127.0.0.1:8000/docs` or `http://127.0.0.1:8000/redoc`)
+
+Including tags in your routers can improve the readability and organization of your API, making it easier to understand and navigate through the various endpoints.
+
+[Refer](auth_user_routerTags.py)
+
+### Authentication & Users - JWT Token Basics
+
+JWT (JSON Web Token) is an open standard (RFC 7519) for **securely transmitting information between parties** as a JSON object. It is commonly used for **authentication and authorization purposes** in web applications.
+
+Here are the basic components and concepts of JWT:
+
+1. **Header**: The JWT header contains **metadata about the token** and specifies the algorithm used to sign and encode the token. It typically consists of two parts: **the token type (JWT)** and **the signing algorithm** (e.g., HMAC, RSA, or others).
+
+2. **Payload**: The JWT payload contains the **claims or statements about the user or entity**. Claims can include information such as user ID, username, role, and other relevant data. There are three types of claims: *reserved claims*, *public claims*, and *private claims*. Reserved claims have predefined meanings, while public and private claims are custom claims defined by the application.
+
+3. **Signature**: The JWT signature is used to **verify the authenticity of the token**. It is created by combining the *encoded header, encoded payload, and a secret key* (or a public/private key pair) using the specified signing algorithm. The signature ensures that the token has not been tampered with during transmission.
+
+4. **Encoding**: The header and payload are Base64Url encoded to form the first two parts of the JWT. The encoded parts are concatenated with a period ('.') separator. The resulting string represents the JWT token.
+
+When using JWT for authentication and authorization, the general flow is as follows:
+
+1. **User Authentication**: The user provides their credentials (e.g., username and password) to the server for authentication.
+
+2. **Token Generation**: Upon successful authentication, the server generates a JWT token. The token typically includes the user's ID or other relevant information as part of the payload.
+
+3. **Token Issuance**: The server sends the JWT token back to the client as a response.
+
+4. **Token Usage**: The client includes the JWT token in subsequent requests by adding it to the Authorization header or as a parameter in the request.
+
+5. **Token Verification**: On each request, the server validates the JWT token's signature, verifies the token's claims, and ensures its validity and integrity.
+
+6. **Authorization**: The server checks the user's permissions and roles based on the information in the token's payload to determine whether the user is authorized to access the requested resources.
+
+> JWT tokens are self-contained and can be decoded and verified by the server without the need for database lookups or session management. They provide a stateless mechanism for authentication and can be used in various scenarios, including APIs, single sign-on (SSO), and microservices architectures.
+
+It's important to note that JWT tokens should be used securely, and sensitive information should not be included in the payload to prevent potential security risks. Proper measures should be taken to secure the transmission and storage of JWT tokens, such as using HTTPS for communication and securely storing the secret keys or using asymmetric key pairs.
+
+### Authentication & Users - Login Process
+
+The login process in the context of authentication and user management involves verifying the user's credentials and granting access to protected resources. Here's a basic outline of the login process using JWT authentication:
+
+1. **User Authentication**: The user provides their credentials (e.g., username and password) through a login form or API endpoint.
+2. **Validate Credentials**: The server validates the user's credentials by checking if they match the stored user data in the database. This can involve querying the database to retrieve the user record based on the provided username or email.
+3. **Generate JWT Token**: If the credentials are valid, the server generates a JWT token with the necessary claims (e.g., user ID, username, role) and signs it using a secret key. The token is typically set with an expiration time to enhance security.
+4. **Token Issuance**: The server sends the JWT token back to the client as a response, usually within the response body or a specific header (e.g., Authorization header).
+5. **Client Storage**: The client application stores the received JWT token securely. Common storage options include browser cookies, local storage, or session storage. The token should be stored securely and protected from unauthorized access.
+6. **Token Usage**: On subsequent requests to access protected resources or perform authorized actions, the client includes the JWT token in the Authorization header or as a parameter. This allows the server to identify and authenticate the user.
+7. **Token Verification**: Upon receiving a request, the server verifies the JWT token's signature and decodes the token to retrieve the user's claims. The server then checks if the user has the necessary permissions to access the requested resource.
+8. **Grant Access**: If the JWT token is valid and the user has the required permissions, the server grants access to the requested resource or performs the authorized action. Otherwise, the server returns an appropriate error response (e.g., 401 Unauthorized).
+
+Additionally, it's recommended to use secure communication protocols (e.g., HTTPS) to transmit sensitive data and enforce secure password policies (e.g., password complexity requirements, password expiration) to enhance overall security.
