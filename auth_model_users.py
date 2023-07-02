@@ -1,6 +1,10 @@
+## auth_model_users.py
+
 from sqlalchemy import Column, String, Integer, DateTime, func
 from sqlalchemy.ext.declarative import declarative_base
 import bcrypt
+from passlib.context import CryptContext
+
 
 Base = declarative_base()
 
@@ -14,8 +18,14 @@ class User(Base):
     created_at = Column(DateTime, default=func.now())
     executed_at = Column(DateTime, onupdate=func.now())
 
-    def set_password(self, password):
-        hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
-        self.password = hashed_password.decode()
+    # def set_password(self, password):
+    #     hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+    #     self.password = hashed_password.decode()
         # hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         # self.password = hashed_password.decode('utf-8')
+
+    def set_password(self, password, context=bcrypt.gensalt()):
+        hashed_password = bcrypt.hashpw(password.encode(), context)
+        self.password = hashed_password.decode()
+
+

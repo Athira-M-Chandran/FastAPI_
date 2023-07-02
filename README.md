@@ -1973,3 +1973,48 @@ The login process in the context of authentication and user management involves 
 8. **Grant Access**: If the JWT token is valid and the user has the required permissions, the server grants access to the requested resource or performs the authorized action. Otherwise, the server returns an appropriate error response (e.g., 401 Unauthorized).
 
 Additionally, it's recommended to use secure communication protocols (e.g., HTTPS) to transmit sensitive data and enforce secure password policies (e.g., password complexity requirements, password expiration) to enhance overall security.
+
+### Authentication & Users - Creating a Token
+
+To create a token for user authentication, you can use a JWT (JSON Web Token) library that supports token generation and signing. Here's an example of how to create a JWT token in Python using the PyJWT library:
+
+1. Install PyJWT library:
+```
+pip install PyJWT
+```
+
+2. Import necessary modules:
+```
+import jwt
+import datetime
+```
+3. Define a function to generate a JWT token:
+```
+def create_token(user_id, secret_key, expires_in_minutes=60):
+    # Define the payload with user-specific claims
+    payload = {
+        'user_id': user_id,  # unique identifier 
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=expires_in_minutes)
+    }
+
+    # Generate the JWT token
+    token = jwt.encode(payload, secret_key, algorithm='HS256')
+
+    return token
+```
+4. Generate a token for a specific user:
+```
+user_id = 123
+secret_key = 'your_secret_key'
+
+token = create_token(user_id, secret_key)
+```
+[Refer](auth_user_token.py)
+
+### Authentication & Users - OAuth2 PasswordRequestForm
+
+[Refer](auth_user_token_api.py)
+
+### Authentication & Users - Verify user is Logged In
+
+[Refer](auth_user_token_outh.py)
