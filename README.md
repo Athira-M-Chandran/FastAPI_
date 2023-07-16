@@ -2018,3 +2018,68 @@ token = create_token(user_id, secret_key)
 ### Authentication & Users - Verify user is Logged In
 
 [Refer](auth_user_token_outh.py)
+
+### Authentication & Users - Fixing Bugs
+
+1. **Reproduce the bug**: Begin by reproducing the bug in a controlled environment. This will allow you to understand the specific steps or conditions that trigger the issue. Document the steps involved and gather any relevant error messages or logs.
+2. **Understand the expected behavior**: Review the system's documentation, specifications, or user requirements to ensure a clear understanding of the expected behavior for authentication and user-related features. Compare the expected behavior with the observed behavior to identify any discrepancies.
+3. **Isolate the bug**: Narrow down the scope of the problem by isolating the bug to specific modules, functions, or components. By doing so, you can focus your debugging efforts on the relevant areas, reducing complexity.
+4. **Review the code**: Examine the code related to authentication and user-related functionality. Look for logical errors, incorrect assumptions, or missing validations that could lead to unexpected behavior. Pay close attention to input validation, authentication methods, session management, and access control mechanisms.
+5. **Check dependencies**: Ensure that any external libraries, frameworks, or APIs used for authentication and user management are up to date and properly integrated. Verify that you are using the recommended versions and configurations and that there are no known issues or security vulnerabilities associated with them.
+6. **Debugging tools**: Utilize debugging tools and techniques to trace the code execution, inspect variables, and step through the relevant sections of the code. This can help identify the point at which the bug occurs and provide insights into the root cause.
+7. **Test cases**: Develop or review existing test cases specifically designed to cover authentication and user-related scenarios. Verify that these test cases cover both expected and edge cases, including different user roles, input variations, and error conditions.
+8. **Logging and error handling**: Ensure that appropriate logging and error handling mechanisms are in place. Review the logs and error messages to identify any relevant information or patterns that could help pinpoint the issue.
+9. **Fix the bug**: Based on the analysis and understanding gained from the previous steps, implement the necessary changes to fix the bug. This might involve modifying the code, updating configuration settings, or addressing any issues related to dependencies.
+10. **Test the fix**: After making the code changes, thoroughly test the affected authentication and user-related functionality to ensure that the bug is resolved and that it does not introduce any new issues. Revisit the test cases identified earlier and validate that the expected behavior is now being exhibited.
+11. **Deployment and monitoring**: Once the bug fix has been tested and validated, deploy the updated code to the production environment. Monitor the system closely after deployment to verify that the fix is effective and that there are no regressions or other unforeseen issues.
+
+### Authentication & Users - Protecting Routes
+
+To protect routes in FastAPI, you can use the `Depends` function from `fastapi.security` module along with an authentication function. Here's an example of how to protect routes using token-based authentication:
+
+1. Import the necessary modules and define the authentication function:
+
+```
+from fastapi import FastAPI, Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+
+app = FastAPI()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
+
+def authenticate_user(token: str = Depends(oauth2_scheme)):
+    # Implement your logic to authenticate the user based on the token
+    # Check the token validity, decode it, and verify if it belongs to a valid user
+    # Return the user if authenticated, or raise an HTTPException with 401 Unauthorized status code
+    # Example implementation:
+    if token != "valid_token":
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    return True
+```
+1. Protect the route by adding the `Depends(authenticate_user)` parameter to the route function:
+```
+@app.get("/protected")
+async def protected_route(user: bool = Depends(authenticate_user)):
+    # Only executed if the user is authenticated
+    # Implement your logic for the protected route here
+    return {"message": "You are accessing a protected route"}
+```
+
+### Authentication & Users - Test Expired Token
+
+To test an expired token, you can manually create a token with a very short expiration time, such as a few seconds, and then attempt to access a protected route with that token after it has expired. Here's an example of how you can simulate an expired token:
+
+1. Set a very short expiration time for the token in the `create_access_token` function. For example, you can set `expires_delta` to `5` (5 minutes) instead of `30`.
+```
+access_token = create_access_token(data={'sub': user.username}, secret_key='your_secret_key', expires_delta=5)
+```
+1. Start the FastAPI application and obtain a token by making a request to the `/token` endpoint.
+2. Copy the token and wait for more than 5 minutes (or whatever expiration time you set in step 1) to ensure it has expired.
+3. Make a request to a protected route, such as `/protected`, and include the expired token in the `Authorization` header as a bearer token.
+```
+GET /protected HTTP/1.1
+Host: localhost:8000
+Authorization: Bearer <expired_token>
+```
+4. The server should respond with an HTTP 401 Unauthorized status code and the message "Invalid authentication token" because the token has expired.
+
+This test will simulate the behavior of an expired token and allow you to verify that the authentication middleware correctly handles expired tokens.
