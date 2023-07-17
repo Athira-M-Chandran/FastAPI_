@@ -2063,6 +2063,7 @@ async def protected_route(user: bool = Depends(authenticate_user)):
     # Implement your logic for the protected route here
     return {"message": "You are accessing a protected route"}
 ```
+[Refer](auth_user_fetch.py)
 
 ### Authentication & Users - Test Expired Token
 
@@ -2083,3 +2084,19 @@ Authorization: Bearer <expired_token>
 4. The server should respond with an HTTP 401 Unauthorized status code and the message "Invalid authentication token" because the token has expired.
 
 This test will simulate the behavior of an expired token and allow you to verify that the authentication middleware correctly handles expired tokens.
+
+### Authentication & Users - Postman advanced Features
+
+1. **Environment Variables** : Postman allows you to define environment variables that can be used across requests. You can set variables for different environments(e.g, development, staging, production) and easily switch between them.
+
+2. **Pre-request scripts** : with pre-request scripts, you can write Javascript Code that is executed before sending a request. This allows you to dynamically modify request parameters, headers, or even generate dynamic values for testing purposes.
+
+3. **Tests** : Postman provide a testing framework that allows you to write JavaScript- based tests for your API reponses. You can assert response status code, validate response data, and perform complex validation using JavaScript code
+
+4. **Collection Runner** : The collection runner feature allows you to run a collection of requests in a sequence or in parallel. You can define iterations, set variables, and export the results for further analysis.
+
+5. **Automated Testing with Newman** : Newman is a command line tool that allows you to run Postman collections from the command line or as a part of your CI/CD pipeline. It enables you to automate the execution of your API tests.
+
+6. **Mock servers** : Postman allows you to create mock servers that simulate API endpoints. This is useful for testing API integrations when the actual backend is not available or when you want to isolate your tests from the live systems.
+
+7. **API Documentations** : Postman provides a built-in feature  to create API documentation from your requests and collections . YOu can add descriptions ,examples and organize your documentation foe easy sharing with your team or API consumers.'
