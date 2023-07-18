@@ -2085,6 +2085,8 @@ Authorization: Bearer <expired_token>
 
 This test will simulate the behavior of an expired token and allow you to verify that the authentication middleware correctly handles expired tokens.
 
+[https://jwt.io/](https://jwt.io/)
+
 ### Authentication & Users - Postman advanced Features
 
 1. **Environment Variables** : Postman allows you to define environment variables that can be used across requests. You can set variables for different environments(e.g, development, staging, production) and easily switch between them.
@@ -2100,3 +2102,185 @@ This test will simulate the behavior of an expired token and allow you to verify
 6. **Mock servers** : Postman allows you to create mock servers that simulate API endpoints. This is useful for testing API integrations when the actual backend is not available or when you want to isolate your tests from the live systems.
 
 7. **API Documentations** : Postman provides a built-in feature  to create API documentation from your requests and collections . YOu can add descriptions ,examples and organize your documentation foe easy sharing with your team or API consumers.'
+
+## Section 9
+### Relationships - SQL Relationship Basics
+In relational databases, relationships define the associations between tables. They establish connections and dependecies between tables, allowing you to query related data and  maintain data integrity. The several  types of relationships commonly used in SQL databases:
+
+1. One-to-one relationship :
+- In a one-to-one relationship, each record in one table is associated with exactly one record in another table, and vice versa.
+- This type of relationship is represented by a foreign key in either table that references the primary key of the other table.
+- For example, consider two tables: "Employee" and "Address." Each employee can have only one address, and each address belongs to only one employee.
+
+SQL Table Definitions:
+
+*User Table:*
+```
+CREATE TABLE User (
+    id INT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    -- Other user-specific columns
+);
+```
+
+*Profile Table:*
+```
+CREATE TABLE Profile (
+    id INT PRIMARY KEY,
+    user_id INT UNIQUE,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    -- Other profile-specific columns
+);
+
+```
+
+*Querying Data:*
+
+Now, if we want to get the profile of a user with id 1, we can use a SQL JOIN to retrieve the data from both tables:
+```
+SELECT User.id, User.username, User.email,
+       Profile.first_name, Profile.last_name
+FROM User
+JOIN Profile ON User.id = Profile.user_id
+WHERE User.id = 1;
+
+```
+
+2. One-to-Many (1:N) Relationship:
+- In a one-to-many relationship, each record in one table is associated with one or more records in another table, but each record in the other table is associated with only one record in the first table.
+- This relationship is represented by a foreign key in the "many" table that references the primary key of the "one" table.
+- For example, consider two tables: "Department" and "Employee." Each department can have multiple employees, but each employee belongs to only one department.
+
+*Department Table:*
+```
+CREATE TABLE Department (
+    id INT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    -- Other department-specific columns
+);
+
+```
+
+*Employee Table:*
+```
+CREATE TABLE Employee (
+    id INT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    department_id INT,
+    -- Other employee-specific columns
+    FOREIGN KEY (department_id) REFERENCES Department(id)
+);
+
+```
+
+*Querying Data:*
+
+Now, if we want to get all employees belonging to a specific department, we can use a SQL JOIN to retrieve the data from both tables:
+```
+SELECT Department.name AS department_name, Employee.name AS employee_name
+FROM Department
+JOIN Employee ON Department.id = Employee.department_id
+WHERE Department.id = 1;
+
+```
+
+3. Many-to-Many (N:N) Relationship:
+- In a many-to-many relationship, each record in one table is associated with one or more records in another table, and vice versa.
+- This type of relationship is implemented using an intermediary table, often called a "junction" or "link" table, that connects the two related tables.
+- The junction table contains foreign keys referencing the primary keys of both tables involved in the relationship.
+- For example, consider two tables: "Student" and "Course." Each student can enroll in multiple courses, and each course can have multiple students. The junction table, "Enrollment," would store the student ID and course ID for each enrollment.
+
+*Student Table*:
+```
+CREATE TABLE Student (
+    id INT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    -- Other student-specific columns
+);
+
+```
+*Course Table*:
+```
+CREATE TABLE Course (
+    id INT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    -- Other course-specific columns
+);
+
+```
+
+*Enrollment Table (To represent the N:N relationship):*
+```
+CREATE TABLE Enrollment (
+    student_id INT,
+    course_id INT,
+    PRIMARY KEY (student_id, course_id),
+    FOREIGN KEY (student_id) REFERENCES Student(id),
+    FOREIGN KEY (course_id) REFERENCES Course(id)
+);
+
+```
+
+Querying Data:
+
+Now, if we want to get all courses in which a specific student is enrolled, or all students enrolled in a particular course, we can use SQL JOINs to retrieve the data from all three tables:
+
+*Get all courses for a specific student (e.g., student with id = 1):*
+```
+SELECT Course.name AS course_name
+FROM Course
+JOIN Enrollment ON Course.id = Enrollment.course_id
+WHERE Enrollment.student_id = 1;
+
+```
+*Get all students enrolled in a specific course (e.g., course with id = 101):*
+```
+SELECT Student.name AS student_name
+FROM Student
+JOIN Enrollment ON Student.id = Enrollment.student_id
+WHERE Enrollment.course_id = 101;
+
+```
+
+4. **Self-Referencing Relationship**:
+- A self-referencing relationship occurs when a table relates to itself, creating hierarchical or recursive structures.
+- This is often used to model hierarchical data such as organizational structures or categories.
+- For example, consider a "Category" table where each category can have a parent category from the same table.
+
+Let's consider an example of an "Employee" table with a self-referencing relationship to represent the manager-subordinate relationship.
+
+```
+CREATE TABLE Employee (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    title VARCHAR(100),
+    manager_id INT,  -- This column is the foreign key that references the same table
+    FOREIGN KEY (manager_id) REFERENCES Employee(id) ON DELETE SET NULL
+);
+
+```
+The `FOREIGN KEY (manager_id) REFERENCES Employee(id) ON DELETE SET NULL` defines the self-referencing relationship. When an employee's manager is deleted (e.g., when a manager leaves the company), the `ON DELETE SET NULL` ensures that the `manager_id` of the subordinate employee is set to `NULL`, indicating that the employee no longer has a manager.
+
+Here's an example of how the data might look:
+
+```
+id | name      | title          | manager_id
+---+-----------+----------------+-----------
+1  | John      | CEO            | NULL
+2  | Sarah     | Manager        | 1
+3  | Michael   | Supervisor     | 2
+4  | Anna      | Supervisor     | 2
+5  | David     | Associate      | 3
+6  | Emily     | Associate      | 3
+
+```
+
+In this example, John is the CEO and has no manager (manager_id is NULL). Sarah is a Manager and reports to John (manager_id is 1, which refers to John's id).Michael and Anna are Supervisors and report to Sarah (both have manager_id as 2, which refers to Sarah's id).David and Emily are Associates and report to Michael (both have manager_id as 3, which refers to Michael's id)
+
+### Relationships - Postgres Foreign Keys
+
+### Relationships - SQLAlchemy Foreign Keys
+
+### Relationships - Update Post Schema to include User
