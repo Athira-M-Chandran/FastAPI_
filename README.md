@@ -2281,6 +2281,61 @@ In this example, John is the CEO and has no manager (manager_id is NULL). Sarah 
 
 ### Relationships - Postgres Foreign Keys
 
+Let's consider two tables: "students" and "courses."
+
+1. Create the "students" table:
+```
+CREATE TABLE students (
+    id INT GENERATED ALWAYS AS IDENTITY,
+    name VARCHAR(100),
+    age INT
+    PRIMARY KEY(id)
+);
+
+```
+2. Create the "courses" table:
+```
+CREATE TABLE courses (
+    courses_id INT GENERATED ALWAYS AS IDENTITY,
+    students_id INT,
+    name VARCHAR(100),
+    instructor VARCHAR(100),
+    PRIMARY KEY(courses_id),
+    CONSTRAINT fk_student
+        FOREIGN KEY(students_id)
+            REFERENCES students(id)
+            ON DELETE SET NULL
+);
+
+DELETE FROM students
+WHERE id = 1;
+
+SELECT * FROM courses # here students with id 1 now have the students_id sets to NULL
+
+```
+
+*CASCADE*
+
+The `ON DELETE CASCADE` automatically deletes all the referencing rows in the child table when the referenced rows in the parent table are deleted. In practice, `the ON DELETE CASCADE` is the most commonly used option.
+```
+CONSTRAINT fk_student
+        FOREIGN KEY(students_id)
+            REFERENCES students(id)
+            ON DELETE CASCADE
+```
+
+To add a foreign key constraint to the existing table, you use the following form of the ALTER TABLE statement:
+```
+ALTER TABLE child_table 
+ADD CONSTRAINT constraint_name 
+FOREIGN KEY (fk_columns) 
+REFERENCES parent_table (parent_key_columns);
+ON DELETE CASCADE;
+```
 ### Relationships - SQLAlchemy Foreign Keys
 
+[Refer](foreign_key_sqlalchemy.py)
+
 ### Relationships - Update Post Schema to include User
+
+[Refer](alembic\versions\5c73cea24927_add_user_id_column_to_posts_table.py)
